@@ -2,12 +2,10 @@ global:
   scrape_interval: 15s # Interval waktu untuk mengambil data metrik
 
 scrape_configs:
-  # Konfigurasi untuk memonitor Prometheus itu sendiri
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
-
-  # Konfigurasi untuk memonitor Node Exporter
-  - job_name: 'srv1-node-exporter'
+      - targets: ['prometheus:9090']
+  - job_name: cadvisor
+    scrape_interval: 5s
     static_configs:
-      - targets: ['coba-monitor-app:9100'] # 'node-exporter' adalah nama layanan di docker-compose
+      - targets: ['cadvisor:8080']

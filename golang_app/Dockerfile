@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 
 #--- Instalasi Go ---
 # Tentukan versi Go dan arsitektur
-ENV GO_VERSION 1.25.1
-ENV GO_ARCH amd64
+ENV GO_VERSION=1.25.1
+ENV GO_ARCH=amd64
 
 # Download, ekstrak, dan install Go
 RUN wget https://golang.org/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz -O /tmp/go.tar.gz && \
@@ -26,8 +26,8 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 
 #--- Instalasi Node Exporter ---
 # Tentukan versi Node Exporter dan arsitektur
-ENV NODE_EXPORTER_VERSION 1.9.1
-ENV NODE_EXPORTER_ARCH amd64
+ENV NODE_EXPORTER_VERSION=1.9.1
+ENV NODE_EXPORTER_ARCH=amd64
 
 # Download, ekstrak, dan install Node Exporter
 RUN wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-${NODE_EXPORTER_ARCH}.tar.gz -O /tmp/node_exporter.tar.gz && \
@@ -41,6 +41,10 @@ WORKDIR /app
 
 # Salin kode sumber aplikasi
 COPY app/ .
+
+# build dependencies
+RUN go mod tidy
+RUN go mod download
 
 # Build aplikasi Go. Outputnya akan bernama 'hello-api'
 RUN go build -o hello-api .
